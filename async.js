@@ -1,4 +1,5 @@
 //关于async 中return 和 return await 的差异
+console.log('请注意打印顺序：')
 console.log('return promise:', (async () => {
   return new Promise((resolve, reject) => {
     resolve(1)
@@ -26,7 +27,7 @@ console.log('no return:', (async () => {
 console.log('return null:', (async () => {
   return
 })().then(d => console.log('return null:', d)))
-/*
+/*  请注意打印顺序：
     return promise: Promise { <pending> }
     return await promise: Promise { <pending> }
     return const: Promise { <pending> }
@@ -40,3 +41,17 @@ console.log('return null:', (async () => {
     no return: undefined
     return promise: 1
 */
+
+function* gen1() {
+  return yield 1;
+}
+let it1 = gen1()
+it1.next()//{value: 1, done: false}
+it1.next()//{value: undefined, done: true}
+
+function* gen2() {
+  return 1;
+}
+let it2 = gen2()
+it2.next()//{value: 1, done: true}
+it2.next()//{value: undefined, done: true}
