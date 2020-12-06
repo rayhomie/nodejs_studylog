@@ -1,16 +1,12 @@
+/*
 //http模块
 var http = require('http');
 http.createServer((request, response) => {
   console.log(request.url)//获取url
   response.writeHead(200, { 'Content-Type': 'text/plain;charset="utf-8"' })
-  console.log((async () => {
-    return new Promise((resolve, reject) => {
-      resolve(1)
-    })
-
-  })().then(d => console.log(d)))
   response.end('Hello 哈哈哈 ' + request.url)
 }).listen(8039, () => console.log('Server running at http://localhost:8039/'))
+*/
 
 /*
 //url模块
