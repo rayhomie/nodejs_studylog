@@ -3,7 +3,7 @@
 var http = require('http');
 http.createServer((request, response) => {
   console.log(request.url)//获取url
-  response.writeHead(200, { 'Content-Type': 'text/plain;charset="utf-8"' })
+  response.writeHead(200, { 'Content-Type': 'text/plain;charset=utf-8' })
   response.end('Hello 哈哈哈 ' + request.url)
 }).listen(8039, () => console.log('Server running at http://localhost:8039/'))
 */

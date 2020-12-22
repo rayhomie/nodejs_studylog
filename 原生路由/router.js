@@ -26,7 +26,7 @@ let app = {
     res.end('new')
   },
   list: (req, res) => {
-    res.writeHead(200, { 'Content-Type': 'application/json;charset="utf-8"' })
+    res.writeHead(200, { 'Content-Type': 'application/json;charset=utf-8' })
     res.end(JSON.stringify([
       {
         user_avatar:

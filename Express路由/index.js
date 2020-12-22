@@ -5,8 +5,10 @@ const data = require('./const')//静态数据
 
 http.createServer(app).listen(8039, () => console.log('Server running at http://localhost:8039/'))
 
+app.static('public')//注册静态路由
+
 //事件循环，首先执行同步代码，去注册路由
-app.get('/login', (req, res) => {
+app.get('/list', (req, res) => {
   const query = url.parse(req.url, true).query
   const page_size = parseInt(query.page_size)
   const page = parseInt(query.page)
