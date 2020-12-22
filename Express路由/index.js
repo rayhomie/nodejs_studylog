@@ -1,7 +1,7 @@
 const http = require('http');
 const url = require('url')
-const app = require('./router')
-const data = require('./const')
+const app = require('./router')//封装的express路由
+const data = require('./const')//静态数据
 
 http.createServer(app).listen(8039, () => console.log('Server running at http://localhost:8039/'))
 
