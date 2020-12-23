@@ -1,0 +1,15 @@
+.hhh {
+  color: red;
+}
+.title {
+  animation: mymove 1s infinite;
+}
+
+@keyframes mymove {
+  from {
+    color: rgba(255, 255, 255, 0.788);
+  }
+  to {
+    color: #000;
+  }
+}
