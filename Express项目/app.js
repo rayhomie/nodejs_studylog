@@ -4,12 +4,20 @@
  * @Author: leihao
  * @Date: 2021-01-21 11:13:17
  * @LastEditors: leihao
- * @LastEditTime: 2021-01-21 15:36:38
+ * @LastEditTime: 2021-01-22 14:42:33
  */
 
 const express = require('express')
+const cookieParser = require('cookie-parser')
 const app = express()
 app.listen(3000)//异步最后执行
+
+app.use((req, res, next) => {/*匹配任何路由*/
+  console.log(new Date())
+
+  next();/*表示匹配完成这个中间件以后程序继续向下执行*/
+})
+app.use(cookieParser())
 
 //配置静态web目录中间件
 // app.use(express.static('static'))（默认）
@@ -35,25 +43,33 @@ app.get('/', (req, res) => {
   </script>`)
 })
 
-app.get('/article/add', (req, res) => {
-  res.send('文章页面')//动态路由add
-})
 //动态路由http://localhost:3000/article/add
-app.get('/article/:id', (req, res) => {
-  res.send('动态路由' + req.params.id)//文章页面add
+app.get('/article/add', (req, res, next) => {
+  console.log('执行增加新闻')
+  next()
 })
 
+app.get('/article/:id', (req, res) => {
+  res.send('动态路由' + req.params.id)//动态路由add
+})
 app.get('/product', (req, res) => {
   res.send('商品页面' + JSON.stringify(req.query))
 })
 
 app.get('/login', (req, res) => {
+  // 设置cookie（maxAge单位ms）
+  res.cookie('username', 'zhangsan', { maxAge: 1000 * 60 * 60 })
   res.send('登录页面')
 })
 app.get('/register', (req, res) => {
-  res.send('注册页面')
+  // 获取cookie
+  res.send('注册页面' + (req.cookies.username || ''))
 })
 
 app.get('/ejs', (req, res) => {
   res.render('index', { title: '<h1>title<h1>' })
+})
+
+app.use((req, res, next) => {
+  res.status(404).send('404')
 })
