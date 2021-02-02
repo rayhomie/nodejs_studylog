@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
-const admin = require('./routes/admin')
 const index = require('./routes/index')
+const admin = require('./routes/admin')
 const api = require('./routes/api')
 
 app.listen(3000)//异步最后执行
