@@ -10,7 +10,14 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
+//配置分布式session
+const MongoStore = require('connect-mongo')(session)
 const app = express()
+
+//导入login路由模块
+const login = require('./routes/login')
+
+
 app.listen(3000)//异步最后执行
 
 app.use((req, res, next) => {/*匹配任何路由*/
@@ -39,7 +46,12 @@ app.use(session({
   cookie: { //（session是基于cookie的）
     maxAge: 1000 * 60,//单位ms，设置session的过期时间
     secure: false //true表示只有https协议才能访问session
-  }
+  },
+  store: new MongoStore({
+    url: 'mongodb://127.0.0.1:27017/shop',
+    touchAfter: 24 * 3600
+  })//配置分布式session    
+  //配置分布式session（当前url下的shop数据库）运行了该程序之后我们就可以到shop数据库中得sessions表中查看登录的session信息。
 }))
 
 app.get('/', (req, res) => {
@@ -74,12 +86,8 @@ app.get('/product', (req, res) => {
   res.send('商品页面' + JSON.stringify(req.query) + username)
 })
 
-app.get('/login', (req, res) => {
-  // 设置cookie（maxAge单位ms）
-  res.cookie('username', '张三', { maxAge: 1000 * 60 * 60, signed: cookieSigned })
-  // 设置session
-  req.session.age = 100000
-  res.send('登录页面')
+app.get('/ejs', (req, res) => {
+  res.render('index', { title: '<h1>title<h1>' })
 })
 
 app.get('/register', (req, res) => {
@@ -87,16 +95,9 @@ app.get('/register', (req, res) => {
   res.send('注册页面' + (cookieSigned ? req.signedCookies.username : req.cookies.username || '') + (req.session.age || ''))
 })
 
-app.get('/ejs', (req, res) => {
-  res.render('index', { title: '<h1>title<h1>' })
-})
+//挂载login模块
+app.use('/', login)
 
-//退出登录
-app.get('/loginOut',(req,res)=>{
-  //方法一、设置session的过期时间为0
-  req.session.cookie.maxAge = 0//（弊端：但是所有的session都过期了）
-  res.send("退出登录")
-})
 
 app.use((req, res, next) => {
   res.status(404).send('404')
