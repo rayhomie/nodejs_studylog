@@ -45,11 +45,35 @@ var instance = new User({
     age: 20,
     status: 1
 })
-instance.save((err)=>{
-    if(err) {
+instance.save((err, doc) => {
+    if (err) {
         console.log(err)
         return
     }
-    console.log('成功')
+    console.log(doc)
 })//执行增加操作
 
+// 7.修改数据
+User.updateOne(
+    { "_id": "23213213" },
+    { name: 'wangwu', age: 18, status: 0 },
+    (err, doc) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log(doc)
+    }
+)
+
+// 8.删除数据
+User.deleteOne(
+    { "_id": "23213213" },
+    (err, doc) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log(doc)
+    }
+)
