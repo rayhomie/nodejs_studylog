@@ -34,9 +34,11 @@ router.get('/newscontent', async (ctx) => {
     ctx.body = '新闻详情'
 })
 
-// 动态路由
-router.get('/', async (ctx) => {
-
+// 动态路由里面可以传多个值
+router.get('/article/:aid/:cid', async (ctx) => {
+    // 访问地址http://localhost:3000/newscontent/123/456
+    // 获取动态路由的传值
+    console.log(ctx.params)// { aid:'123',cid:'456'}
 })
 
 app.listen(3000)
