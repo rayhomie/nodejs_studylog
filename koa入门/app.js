@@ -2,7 +2,6 @@ const koa = require('koa')
 
 const app = new koa()
 
-
 /*
 ejs模板的使用：
 1、npm i koa-views --save
@@ -30,6 +29,22 @@ app.use((req,res,next) =>{
 //   ctx.body = '你好 koa2'
 // })
 
+/*koa-bodyparser中间件获取post数据
+①安装`npm i --save koa-bodyparser`
+②引入模块`const bodyParser=require(koa-bodyparser)`
+③`app.use(bodyParser())`
+④`ctx.request.body`获取表单POST传值
+*/
+const bodyParser = require('koa-bodyparser');
+app.use(bodyParser())
+
+app.use(async ctx => {// ctx.request.body就可以获取到post传值
+  console.log(ctx.request.body)
+  ctx.body = ctx.request.body;
+})
+
+
+
 router.get('/', async (ctx) => {
   await ctx.render('index')// 使用ejs模板
 })
@@ -56,6 +71,31 @@ router.get('/article/:aid/:cid', async (ctx) => {
   // 访问地址http://localhost:3000/newscontent/123/456
   // 获取动态路由的传值
   console.log(ctx.params)// { aid:'123',cid:'456'}
+})
+
+// 异步获取数据
+const getPostData = (ctx) => {
+  return new Promise((resolve, reject) => {
+    try {
+      let str = '';
+      ctx.req.on('data', (chunk) => {
+        str += chunk;
+      })
+      ctx.req.on('end', () => {
+        resolve(str)
+      })
+    } catch (error) {
+      reject(error)
+    }
+  })
+}
+
+// 原生获取post提交的数据
+router.post('/doAdd', async (ctx) => {
+  // 获取表单提交的数据
+  const data = await getPostData(ctx);
+  console.log(data)
+  ctx.body = data
 })
 
 app.use(router.routes())// 作用：启动路由
