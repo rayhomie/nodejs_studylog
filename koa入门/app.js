@@ -2,6 +2,18 @@ const koa = require('koa')
 
 const app = new koa()
 
+/* koa-static静态资源中间件
+让路由优先匹配处理返回静态资源，找不到再返回逻辑接口。
+①`npm i koa-static --save`
+②`const static = require('koa-static')`
+③配置中间件`app.use(static('static'))`
+*/
+const static = require('koa-static')
+// app.use(static(__dirname + '/static'))// 指定静态目录绝对路径
+app.use(static('./static'))// 去项目目录下的static目录下找
+app.use(static('./public'))// 可配置多个静态目录，继续去public目录下面找
+
+
 /*
 ejs模板的使用：
 1、npm i koa-views --save
