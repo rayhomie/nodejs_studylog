@@ -50,10 +50,10 @@ app.use((req,res,next) =>{
 const bodyParser = require('koa-bodyparser');
 app.use(bodyParser())
 
-app.use(async ctx => {// ctx.request.body就可以获取到post传值
-  console.log(ctx.request.body)
-  ctx.body = ctx.request.body;
-})
+// app.use(async ctx => {// ctx.request.body就可以获取到post传值
+//   console.log(ctx.request.body)
+//   ctx.body = ctx.request.body;
+// })
 
 
 
@@ -109,6 +109,27 @@ router.post('/doAdd', async (ctx) => {
   console.log(data)
   ctx.body = data
 })
+
+/* koa中cookie的使用：
+设置cookie
+ctx.cookies.set(name,value,[options])
+获取cookie
+ctx.cookies.get('name')
+*/
+router.get('/cookie', async (ctx) => {
+  // 正常这样配置就可以使用
+  // 注意：koa中没法直接设置中文的cookie
+  const data = new Buffer('我是雷浩').toString('base64')
+  ctx.cookies.set('userInfo', data, {
+    maxAge: 60 * 1000 * 60// 一小时后过期
+  })
+})
+
+router.get('/cookie/getcookie', async (ctx) => {
+  const data = ctx.cookies.get('userInfo')
+  console.log(new Buffer(data, 'base64').toString())// 我是雷浩
+})
+
 
 app.use(router.routes())// 作用：启动路由
   .use(router.allowedMethods())
