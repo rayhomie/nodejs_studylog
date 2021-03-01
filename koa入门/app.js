@@ -130,6 +130,35 @@ router.get('/cookie/getcookie', async (ctx) => {
   console.log(new Buffer(data, 'base64').toString())// 我是雷浩
 })
 
+/* koa-session的使用：
+1.npm i koa-session --save 
+2.引入session
+3.根据官网配置中间件
+*/
+const session = require('koa-session')
+app.keys = ['some secret hurr'];/*cookie的签名*/
+
+const CONFIG = {
+  key: 'koa.sess',// 默认
+  maxAge: 86400000,// 过期时间（需要修改）
+  overwrite: true,// 默认，没有效果
+  httpOnly: true,
+  signed: true,// 默认，签名
+  rolling: false,
+  renew: true,// （需要修改）
+};
+app.use(session(CONFIG, app));
+
+router.get('/session', async (ctx) => {
+  ctx.session.sid = '我是雷浩'
+  ctx.body = '成功写入session'
+})
+
+router.get('/session/getsession', async (ctx) => {
+  const data = ctx.session.sid
+  console.log(data)
+  ctx.body = data
+})
 
 app.use(router.routes())// 作用：启动路由
   .use(router.allowedMethods())
