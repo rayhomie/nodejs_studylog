@@ -11,6 +11,16 @@ router.get('/', async (ctx) => {
   ctx.body = res
 })
 
+router.get('/add', async (ctx) => {
+  const res = await DB.insert('user', { username: 'lisi', age: 2 })
+  ctx.body = res
+})
+
+router.get('/update', async (ctx) => {
+  const res = await DB.update('user', { 'username': 'lisi' }, { age: 0 })
+  ctx.body = res
+})
+
 app.use(router.routes())// 作用：启动路由
   .use(router.allowedMethods())
 

@@ -15,6 +15,7 @@ class Db {
     this.dbClient = '';/*构造函数中存属性放db对象(解决数据库多次连接问题而提升效率)*/
     this.connect()
   }
+
   connect() {/*连接数据库*/
     return new Promise((resolve, reject) => {
       if (!this.dbClient) {
@@ -32,8 +33,8 @@ class Db {
         resolve(this.dbClient)
       }
     })
-
   }
+
   find(collectionName, json) {
     return new Promise((resolve, reject) => {
       this.connect().then((db) => {
@@ -45,6 +46,37 @@ class Db {
           }
           resolve(docs)
         })
+      })
+    })
+  }
+
+  insert(collectionName, json) {
+    return new Promise((resolve, reject) => {
+      this.connect().then((db) => {
+        db.collection(collectionName).insertOne(json, (err, docs) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve(docs)
+        })
+      })
+    })
+  }
+
+  update(collectionName, json1, json2) {
+    return new Promise((resolve, reject) => {
+      this.connect().then((db) => {
+        db.collection(collectionName).updateOne(
+          json1,
+          { $set: json2 },
+          (err, docs) => {
+            if (err) {
+              reject(err);
+              return;
+            }
+            resolve(docs)
+          })
       })
     })
   }
