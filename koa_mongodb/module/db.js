@@ -80,6 +80,20 @@ class Db {
       })
     })
   }
+
+  delete(collectionName, json) {
+    return new Promise((resolve, reject) => {
+      this.connect().then((db) => {
+        db.collection(collectionName).removeOne(json, (err, docs) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve(docs)
+        })
+      })
+    })
+  }
 }
 
 module.exports = Db.getInstance()

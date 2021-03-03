@@ -21,6 +21,11 @@ router.get('/update', async (ctx) => {
   ctx.body = res
 })
 
+router.get('/delete', async (ctx) => {
+  const res = await DB.delete('user', { 'username': 'lisi' })
+  ctx.body = res
+})
+
 app.use(router.routes())// 作用：启动路由
   .use(router.allowedMethods())
 
