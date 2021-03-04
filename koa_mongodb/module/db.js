@@ -1,6 +1,6 @@
 // 封装db类库
 
-const { MongoClient } = require('mongodb')
+const { MongoClient, ObjectID/* 使用id查询 */ } = require('mongodb')
 
 const { dbUrl, dbName } = require('./config')
 
@@ -33,6 +33,10 @@ class Db {
         resolve(this.dbClient)
       }
     })
+  }
+
+  getObjectId(id) {/* mongodb里面查询_id把字符串转换成对象 */
+    return new ObjectID(id)
   }
 
   find(collectionName, json) {
