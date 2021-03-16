@@ -1,4 +1,4 @@
-const mongoose = require('./dbs')
+const mongoose = require('./db')
 
 var UserSchema = mongoose.Schema({
     name: String,
